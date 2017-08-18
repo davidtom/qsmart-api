@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :lines
-      resources :linesusers, only: [:create,:update]
+      resources :lines_users, only: [:create,:update]
       resources :users
 
       get '/users/:id/lines', to: 'users#lines'

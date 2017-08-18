@@ -3,6 +3,7 @@
 # Table name: users
 #
 #  id                :integer          not null, primary key
+#  username          :string
 #  email             :string
 #  password_digest   :string
 #  phone_number      :integer
@@ -13,9 +14,11 @@
 
 class User < ApplicationRecord
   has_secure_password
-  
+
   has_many :lines_users
   has_many :lines, through: :lines_users
   has_many :created_lines, foreign_key: :owner_id, class_name: "Line"
+
+  validates :email, uniqueness: true
 
 end

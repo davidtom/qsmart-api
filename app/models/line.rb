@@ -3,6 +3,7 @@
 # Table name: lines
 #
 #  id         :integer          not null, primary key
+#  code       :string
 #  name       :string
 #  owner_id   :integer
 #  image_url  :string
