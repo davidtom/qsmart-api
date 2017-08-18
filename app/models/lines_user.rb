@@ -10,5 +10,7 @@
 #  updated_at :datetime         not null
 #
 
-class LinesUsers < ApplicationRecord
+class LinesUser < ApplicationRecord
+  belongs_to :user
+  belongs_to :line
 end

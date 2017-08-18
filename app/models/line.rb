@@ -13,4 +13,7 @@
 #
 
 class Line < ApplicationRecord
+  has_many :lines_users
+  has_many :users, through: :lines_users
+  belongs_to :owner, class_name: "User"
 end
