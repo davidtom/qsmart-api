@@ -11,7 +11,7 @@
 end
 
 5.times do |i|
-  line = Line.new(name:Faker::Name.name)
+  line = Line.new(name:Faker::University.name)
   User.all.sample.created_lines << line
 end
 
