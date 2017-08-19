@@ -2,7 +2,7 @@ class Api::V1::LinesController < ApplicationController
 
   def show
     @line = Line.find(params[:id])
-    usernames = @line.users.pluck(:username, :image_url)
+    usernames = @line.users.pluck(:username, :profile_image_url)
     render json: {line: @line, users: usernames}
   end
 
