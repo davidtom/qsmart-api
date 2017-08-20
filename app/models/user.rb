@@ -20,5 +20,6 @@ class User < ApplicationRecord
   has_many :created_lines, foreign_key: :owner_id, class_name: "Line"
 
   validates :email, uniqueness: true
+  validates :phone_number, uniqueness: true
 
 end

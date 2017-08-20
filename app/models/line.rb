@@ -20,6 +20,10 @@ class Line < ApplicationRecord
 
   before_create :generate_code
 
+  validates :name, :owner_id, presence: true
+  validates :code, uniqueness: true
+
+
   def generate_code
     code = Faker::Internet.password(3,3).upcase
     Line.all.pluck(:code).include?(code) ? generate_code : self.code = code
