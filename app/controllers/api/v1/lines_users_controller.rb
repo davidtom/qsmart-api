@@ -1,10 +1,11 @@
 class Api::V1::LinesUsersController < ApplicationController
+  before_action :authenticate_user
 
   def create
     # TODO validate users in auth controller
     # TODO ...make auth controller
     # byebug
-    @user = User.find(request.headers[:Authorization])
+    @user = current_user
     @line = Line.find_by(code: params[:code].upcase)
     if @line
       @line.users << @user
