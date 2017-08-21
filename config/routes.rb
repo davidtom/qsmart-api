@@ -16,4 +16,5 @@ Rails.application.routes.draw do
       get '/lines/:id/users', to: 'lines#users'
     end
   end
+  mount ActionCable.server => '/line'
 end

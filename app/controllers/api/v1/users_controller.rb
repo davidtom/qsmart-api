@@ -5,6 +5,8 @@ class Api::V1::UsersController < ApplicationController
     @user.password = params[:password]
     @user.save
     render json: @user
+    ActionCable.server.broadcast "line_channel",
+                                    user: @user
   end
 
   def cu

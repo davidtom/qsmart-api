@@ -9,6 +9,10 @@ class Api::V1::LinesUsersController < ApplicationController
     if @line
       @line.users << @user
       render json: {line_id: @line.id}, status: 200
+      # If association between lines & users is saved:
+      ActionCable.server.broadcast "list_channel",
+                                      user: @user,
+                                      line: @line
     elsif !@line
       render json: {error: "Invalid line code"}, status: 404
     else
