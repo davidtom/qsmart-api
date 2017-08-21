@@ -2,8 +2,9 @@ class Api::V1::LinesController < ApplicationController
 
   def show
     @line = Line.find(params[:id])
-    usernames = @line.users.pluck(:first_name, :last_name, :profile_image_url)
-    render json: {line: @line, users: usernames}
+    # usernames = @line.users.pluck(:first_name, :last_name, :profile_image_url)
+    # TODO: need only send users who are actively waiting!
+    render json: {line: @line, users: @line.users}
   end
 
   def users

@@ -17,4 +17,16 @@ class Api::V1::LinesUsersController < ApplicationController
     end
   end
 
+  def update
+  end
+
+  def destroy
+    @record = LinesUser.find_by(user_id: params[:user], line_id: params[:line])
+    if @record.destroy
+      render json: {}, status: 204
+    else
+      render json: {error: "unable to delete"}, status: 500
+    end
+  end
+
 end
