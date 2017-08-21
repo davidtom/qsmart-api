@@ -7,7 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 5.times do |i|
-  User.create(username: Faker::Seinfeld.character, email: Faker::Internet.email, password: Faker::Pokemon.name, phone_number: Faker::PhoneNumber.phone_number)
+  User.create(first_name: Faker::Name.first_name, last_name: Faker::Name.last_name, email: Faker::Internet.email, password: Faker::Pokemon.name, phone_number: Faker::PhoneNumber.phone_number)
 end
 
 5.times do |i|
@@ -16,5 +16,8 @@ end
 end
 
 15.times do |i|
+  begin
   Line.all.sample.users << User.all.sample
+rescue => e
+  end
 end

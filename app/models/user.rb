@@ -3,7 +3,8 @@
 # Table name: users
 #
 #  id                :integer          not null, primary key
-#  username          :string
+#  first_name        :string
+#  last_name         :string
 #  email             :string
 #  password_digest   :string
 #  phone_number      :integer
