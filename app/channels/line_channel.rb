@@ -1,7 +1,7 @@
 class LineChannel < ApplicationCable::Channel
   def subscribed
+    # stream_from "line_channel"
     stream_from "line_channel"
-    # stream_from "line_#{params[:line]}"
 
   end
 

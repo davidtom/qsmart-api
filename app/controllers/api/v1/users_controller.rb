@@ -6,7 +6,7 @@ class Api::V1::UsersController < ApplicationController
     @user.save
     render json: @user
     ActionCable.server.broadcast "line_channel",
-                                    user: @user
+                                    user: @user.to_json(only: [:first_name])
   end
 
   def cu
