@@ -5,8 +5,8 @@ class CreateUsers < ActiveRecord::Migration[5.1]
       t.string :last_name
       t.string :email
       t.string :password_digest
-      t.integer :phone_number
-      t.string :profile_image_url
+      t.string :phone_number
+      t.string :profile_image_url, default: "http://thecampanile.org/wp-content/uploads/2016/10/blank-profile.jpg"
 
       t.timestamps
     end
