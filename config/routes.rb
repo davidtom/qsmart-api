@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :lines
-      resources :lines_users, only: [:create,:update, :destroy]
+      resources :lines_users, only: [:create, :update, :destroy]
       resources :users
 
 
