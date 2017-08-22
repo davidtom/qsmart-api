@@ -10,6 +10,7 @@ class Api::V1::LinesUsersController < ApplicationController
     if @line
       @line.users << @user
       line_id = @line.id
+      UserChannel.broadcast_to(@user, @line)
       render json: {line_id: @line.id}, status: 200
       # LineChannel.broadcast_to(@line, @line.waiting_users)
     elsif !@line
@@ -26,7 +27,7 @@ class Api::V1::LinesUsersController < ApplicationController
     @record = LinesUser.find_by(user_id: params[:user], line_id: params[:line])
     if @record.destroy
       render json: {}, status: 204
-      # LineChannel.broadcast_to(@line, @line.waiting_users)
+      LineChannel.broadcast_to(@line, @line.waiting_users)
     else
       render json: {error: "unable to delete"}, status: 500
     end
