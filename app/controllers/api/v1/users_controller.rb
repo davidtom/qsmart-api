@@ -25,7 +25,7 @@ class Api::V1::UsersController < ApplicationController
       line["created_at"] = line.lines_users.where(user_id: current_user.id, waiting:true)[0].created_at
       new_line = line.attributes
       new_line["userCount"] = line.user_count
-      new_line["userPlace"] = line.users.index(current_user) + 1
+      new_line["userPlace"] = line.waiting_users.index(current_user) + 1
       new_line
     end
     render json: @lines

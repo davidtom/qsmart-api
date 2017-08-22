@@ -30,9 +30,11 @@ class Line < ApplicationRecord
   end
 
   def waiting_users
-    a = ActiveRecord::Base.connection
-    result = a.execute(%Q{SELECT users.id, users.first_name, users.last_name, users.email, users.phone_number, users.profile_image_url, lines_users.waiting  FROM users JOIN lines_users ON users.id = lines_users.user_id WHERE waiting=true AND lines_users.line_id=#{a.quote(self.id)};})
-    result
+    # a = ActiveRecord::Base.connection
+    # result = a.execute(%Q{SELECT users.id, users.first_name, users.last_name, users.email, users.phone_number, users.profile_image_url, lines_users.waiting  FROM users JOIN lines_users ON users.id = lines_users.user_id WHERE waiting=true AND lines_users.line_id=#{a.quote(self.id)};})
+    # result
+    user_ids = LinesUser.where(line_id: self.id, waiting: true).pluck(:user_id)
+    User.where(id: user_ids)
     # sql = <<-sql
     # SELECT users.id, users.first_name, users.last_name, users.email,
     # users.phone_number, users.profile_image_url, lines_users.waiting
@@ -45,6 +47,6 @@ class Line < ApplicationRecord
   end
 
   def user_count
-    self.users.count
+    self.waiting_users.count
   end
 end
