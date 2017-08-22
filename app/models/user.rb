@@ -23,4 +23,8 @@ class User < ApplicationRecord
   validates :email, uniqueness: true
   validates :phone_number, uniqueness: true
 
+  def lines_waiting
+    self.lines.where('lines_users.waiting = true')
+  end
+
 end

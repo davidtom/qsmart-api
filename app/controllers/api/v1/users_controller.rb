@@ -20,9 +20,9 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def lines
-    @lines = current_user.lines
+    @lines = current_user.lines_waiting
     @lines = @lines.map.with_index do |line|
-      line.created_at = line.lines_users.where(user_id: current_user.id, waiting:true)[0].created_at
+      line["created_at"] = line.lines_users.where(user_id: current_user.id, waiting:true)[0].created_at
       new_line = line.attributes
       new_line["userCount"] = line.user_count
       new_line["userPlace"] = line.users.index(current_user) + 1
