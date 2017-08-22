@@ -7,8 +7,8 @@
 #  last_name         :string
 #  email             :string
 #  password_digest   :string
-#  phone_number      :integer
-#  profile_image_url :string
+#  phone_number      :string
+#  profile_image_url :string           default("http://thecampanile.org/wp-content/uploads/2016/10/blank-profile.jpg")
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #

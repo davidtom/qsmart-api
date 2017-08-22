@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(version: 20170818154025) do
     t.string "email"
     t.string "password_digest"
     t.string "phone_number"
-    t.string "profile_image_url"
+    t.string "profile_image_url", default: "http://thecampanile.org/wp-content/uploads/2016/10/blank-profile.jpg"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

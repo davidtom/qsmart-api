@@ -9,6 +9,7 @@ class Api::V1::LinesUsersController < ApplicationController
     @line = Line.find_by(code: params[:code].upcase)
     if @line
       @line.users << @user
+      line_id = @line.id
       render json: {line_id: @line.id}, status: 200
     elsif !@line
       render json: {error: "Invalid line code"}, status: 404

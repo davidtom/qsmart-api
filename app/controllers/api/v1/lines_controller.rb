@@ -1,8 +1,10 @@
 class Api::V1::LinesController < ApplicationController
 
   def show
-    @line = Line.find(params[:id])
+    line_id = params[:id]
+    @line = Line.find(line_id)
     render json: {line: @line, users: @line.waiting_users}
+    ActionCable.server.broadcast "line_channel_#{line_id}", @line.users
   end
 
   def users
