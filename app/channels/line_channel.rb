@@ -1,4 +1,5 @@
 class LineChannel < ApplicationCable::Channel
+  # rails g channel Line
   def subscribed
     # stream_from "line_channel_#{params[:room]}"
     @line = Line.find_by(id: params[:room])
