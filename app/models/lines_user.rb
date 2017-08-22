@@ -19,7 +19,7 @@ class LinesUser < ApplicationRecord
 
   def user_waiting_once_in_line
     # ensure that a user is actively waiting in a line only once
-    if self.class.where(line_id: line_id, user_id: user_id, waiting: true).length > 1
+    if !self.class.where(line_id: line_id, user_id: user_id, waiting: true).empty?
       errors.add(:waiting, "A user can only have one waiting position in a line")
     end
   end

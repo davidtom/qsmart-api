@@ -1,10 +1,14 @@
 class Api::V1::UsersController < ApplicationController
   before_action :authenticate_user, except: [:create]
+
   def create
     @user = User.new(user_params)
     @user.password = params[:password]
-    @user.save
-    render json: @user
+    if @user.save
+      render json: @user, status: 200
+    else
+      render json: @user.errors.full_messages, status: 400
+    end
   end
 
   def cu

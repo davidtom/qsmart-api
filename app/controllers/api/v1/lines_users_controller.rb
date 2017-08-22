@@ -26,7 +26,8 @@ class Api::V1::LinesUsersController < ApplicationController
     @record = LinesUser.find_by(user_id: params[:user], line_id: params[:line])
     if @record.destroy
       render json: {}, status: 204
-      # LineChannel.broadcast_to(@line, @line.waiting_users)
+      @line = Line.find(params[:line])
+      LineChannel.broadcast_to(@line, @line.waiting_users)
     else
       render json: {error: "unable to delete"}, status: 500
     end
