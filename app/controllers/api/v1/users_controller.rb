@@ -20,11 +20,25 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def lines
-    render json: current_user.lines
+    @lines = current_user.lines
+    @lines = @lines.map.with_index do |line|
+      line.created_at = line.lines_users.where(user_id: current_user.id, waiting:true)[0].created_at
+      new_line = line.attributes
+      new_line["userCount"] = line.user_count
+      new_line["userPlace"] = line.users.index(current_user) + 1
+      new_line
+    end
+    render json: @lines
   end
 
   def created_lines
-    render json: current_user.created_lines
+    @lines = current_user.created_lines
+    @lines = @lines.map do |line|
+      new_line = line.attributes
+      new_line["userCount"] = line.user_count
+      new_line
+    end
+    render json: @lines
   end
 
   private
