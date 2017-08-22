@@ -20,10 +20,20 @@ class Api::V1::LinesUsersController < ApplicationController
   end
 
   def update
+    # NOTE: below find depends on the fact that a user is only ever waiting in a line once!
+    @record = LinesUser.find_by(user_id: params[:user], line_id: params[:line], waiting: true)
+    if @record.update(waiting: false)
+      render json: {}, status: 204
+      @line = Line.find(params[:line])
+      LineChannel.broadcast_to(@line, @line.waiting_users)
+    else
+      render json: {error: "unable to update"}, status: 500
+    end
   end
 
   def destroy
-    @record = LinesUser.find_by(user_id: params[:user], line_id: params[:line])
+    # NOTE: below find depends on the fact that a user is only ever waiting in a line once!
+    @record = LinesUser.find_by(user_id: params[:user], line_id: params[:line], waiting: true)
     if @record.destroy
       render json: {}, status: 204
       @line = Line.find(params[:line])
