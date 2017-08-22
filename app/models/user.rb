@@ -23,4 +23,9 @@ class User < ApplicationRecord
   validates :email, uniqueness: true
   validates :phone_number, uniqueness: true
 
+  before_create :format_phone_number
+
+  def format_phone_number
+    self.phone_number = '+1' + self.phone_number.scan(/\d+/).join('')
+  end
 end

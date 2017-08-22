@@ -26,6 +26,7 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'rack-cors'
 gem 'knock'
 gem 'figaro'
+gem 'twilio-ruby'
 
 # Action Cable setup
 gem 'actioncable'
