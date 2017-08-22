@@ -20,6 +20,7 @@ class Api::V1::LinesUsersController < ApplicationController
 
         render json: {line_id: @line.id}, status: 200
         LineChannel.broadcast_to(@line, @line.waiting_users)
+        LineJoinedChannel.broadcast_to(@line_joined, @line.waiting_users)
       elsif @line.active == false
         render json: {error: "Line is not active at this time", line: @line}, status: 422
       else
@@ -55,6 +56,7 @@ class Api::V1::LinesUsersController < ApplicationController
       render json: {}, status: 204
       @line = Line.find(params[:line])
       LineChannel.broadcast_to(@line, @line.waiting_users)
+      LineJoinedChannel.broadcast_to(@line_joined, @line)
     else
       render json: {error: "unable to delete"}, status: 500
     end
