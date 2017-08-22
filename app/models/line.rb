@@ -43,4 +43,8 @@ class Line < ApplicationRecord
     # sql
     # Line.find_by_sql(sql, line_id)
   end
+
+  def user_count
+    self.users.count
+  end
 end

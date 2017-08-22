@@ -1,5 +1,10 @@
 class Api::V1::LinesController < ApplicationController
 
+  def create
+    @line = Line.create(name: params[:name])
+    current_user.created_lines << @line
+  end
+
   def show
     line_id = params[:id]
     @line = Line.find(line_id)
