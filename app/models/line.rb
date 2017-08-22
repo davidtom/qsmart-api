@@ -28,4 +28,19 @@ class Line < ApplicationRecord
     code = Faker::Internet.password(3,3).upcase
     Line.all.pluck(:code).include?(code) ? generate_code : self.code = code
   end
+
+  def waiting_users()
+    a = ActiveRecord::Base.connection
+    result = a.execute(%Q{SELECT users.id, users.first_name, users.last_name, users.email, users.phone_number, users.profile_image_url, lines_users.waiting  FROM users JOIN lines_users ON users.id = lines_users.user_id JOIN lines on lines.id = lines_users.line_id WHERE waiting=true AND lines.id=#{a.quote(self.id)};})
+    result
+    # sql = <<-sql
+    # SELECT users.id, users.first_name, users.last_name, users.email,
+    # users.phone_number, users.profile_image_url, lines_users.waiting
+    # FROM users
+    # JOIN lines_users ON users.id = lines_users.user_id
+    # JOIN lines on lines.id = lines_users.line_id
+    # WHERE line = ? AND waiting=true;
+    # sql
+    # Line.find_by_sql(sql, line_id)
+  end
 end
