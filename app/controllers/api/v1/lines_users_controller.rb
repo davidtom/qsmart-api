@@ -63,23 +63,7 @@ class Api::V1::LinesUsersController < ApplicationController
       sleep(0.25)
       @line = Line.find(params[:line])
       LineChannel.broadcast_to(@line, @line.waiting_users)
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
       LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
-=======
-      LineJoinedChannel.broadcast_to(@line_joined, @line)
->>>>>>> Working UserShow websocket for total users in each line
-=======
-      LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
->>>>>>> pre-merge changes
-=======
-      LineJoinedChannel.broadcast_to(@line_joined, @line)
->>>>>>> Working UserShow websocket for total users in each line
-=======
-      LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
->>>>>>> pre-merge changes
     else
       render json: {error: "unable to delete"}, status: 500
     end
