@@ -9,7 +9,9 @@ class Api::V1::LinesUsersController < ApplicationController
     @line = Line.find_by(code: params[:code].upcase)
     if @line
       @line.users << @user
+      line_id = @line.id
       render json: {line_id: @line.id}, status: 200
+      # LineChannel.broadcast_to(@line, @line.waiting_users)
     elsif !@line
       render json: {error: "Invalid line code"}, status: 404
     else
@@ -24,6 +26,7 @@ class Api::V1::LinesUsersController < ApplicationController
     @record = LinesUser.find_by(user_id: params[:user], line_id: params[:line])
     if @record.destroy
       render json: {}, status: 204
+      # LineChannel.broadcast_to(@line, @line.waiting_users)
     else
       render json: {error: "unable to delete"}, status: 500
     end

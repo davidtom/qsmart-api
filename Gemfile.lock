@@ -136,6 +136,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  actioncable
   annotate
   bcrypt (~> 3.1.7)
   byebug

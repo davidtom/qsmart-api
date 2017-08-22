@@ -14,6 +14,9 @@ Rails.application.routes.draw do
       get '/users/:id/lines', to: 'users#lines'
       get '/users/:id/created_lines', to: 'users#created_lines'
       get '/lines/:id/users', to: 'lines#users'
+
+      # Mount ActionCable at api/v1/cable
+      mount ActionCable.server, at: '/cable'
     end
   end
 end
