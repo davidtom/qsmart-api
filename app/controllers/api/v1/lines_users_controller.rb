@@ -20,6 +20,8 @@ class Api::V1::LinesUsersController < ApplicationController
 
         render json: {line_id: @line.id}, status: 200
         LineChannel.broadcast_to(@line, @line.waiting_users)
+      elsif @line.active == false
+        render json: {error: "Line is not active at this time", line: @line}, status: 422
       else
         render json: {error: "User already member of that line", line: @line}, status: 422
       end
