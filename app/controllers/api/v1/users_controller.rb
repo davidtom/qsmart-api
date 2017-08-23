@@ -5,9 +5,9 @@ class Api::V1::UsersController < ApplicationController
     @user = User.new(user_params)
     @user.password = params[:password]
     if @user.save
-      render json: @user, status: 200
+      render json: {status: 200}
     else
-      render json: @user.errors.full_messages, status: 400
+      render json: {messages: @user.errors.full_messages, status: 400}
     end
   end
 
