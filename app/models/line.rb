@@ -33,9 +33,15 @@ class Line < ApplicationRecord
     # a = ActiveRecord::Base.connection
     # result = a.execute(%Q{SELECT users.id, users.first_name, users.last_name, users.email, users.phone_number, users.profile_image_url, lines_users.waiting  FROM users JOIN lines_users ON users.id = lines_users.user_id WHERE waiting=true AND lines_users.line_id=#{a.quote(self.id)};})
     # result
-    user_ids = LinesUser.where(line_id: self.id, waiting: true).order(created_at: :asc, updated_at: :asc).pluck(:user_id)
+    # user_ids = LinesUser.where(line_id: self.id, waiting: true).order(created_at: :asc, updated_at: :asc).pluck(:user_id)
 
-    User.where(id: user_ids).joins("JOIN lines_users on lines_users.user_id = users.id").where("lines_users.waiting=true").order("lines_users.created_at asc")
+    # user_ids.map{|user_id| }
+
+    self.users.where("lines_users.waiting=true").order("lines_users.created_at ASC")
+
+    # User.where(id: user_ids).joins("JOIN lines_users on lines_users.user_id = users.id").where("lines_users.waiting=true").order("lines_users.created_at asc")
+
+
     # User.joins("JOIN lines_users on lines_users.user_id = users.id JOIN lines on lines.id = lines_users.line_id WHERE lines.id = ? AND lines_users.waiting = 'true' ORDER BY lines_users.created_at ASC")
 
     # Author.joins("INNER JOIN posts ON posts.author_id = authors.id AND posts.published = 't'")
