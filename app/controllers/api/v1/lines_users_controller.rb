@@ -5,19 +5,9 @@ class Api::V1::LinesUsersController < ApplicationController
     @user = current_user
     @line = Line.find_by(code: params[:code].upcase)
     if @line
-      # @line.users << @user
       @record = LinesUser.new(user_id: @user.id, line_id: @line.id)
       if @record.save
-        line_id = @line.id
-
-        data = "Welcome to QSmart! Position: #{@line.user_count}; Link: http://localhost:3001/lines/#{line_id}"
-
-        @client = Twilio::REST::Client.new Figaro.env.twilio_account_sid, Figaro.env.twilio_auth_token
-        message = @client.messages.create(
-            body: data,
-            to: current_user.phone_number,
-            from: "+14243432797")
-
+        send_create_text(@line)
         render json: {line_id: @line.id}, status: 200
         sleep(0.25)
         LineChannel.broadcast_to(@line, @line.waiting_users)
@@ -38,9 +28,7 @@ class Api::V1::LinesUsersController < ApplicationController
     # NOTE: below find depends on the fact that a user is only ever waiting in a line once!
     @record = LinesUser.find_by(user_id: params[:user], line_id: params[:line], waiting: true)
     if @record.update(waiting: false)
-      # Commenting this out for testing
-      # send_text(Line.find(params[:line]))
-
+      send_text(Line.find(params[:line]))
       render json: {}, status: 204
       sleep(0.25)
       @line = Line.find(params[:line])
@@ -49,7 +37,6 @@ class Api::V1::LinesUsersController < ApplicationController
     else
       render json: {error: "unable to update"}, status: 500
     end
-
   end
 
   def destroy
@@ -57,8 +44,7 @@ class Api::V1::LinesUsersController < ApplicationController
     # TODO: Add workaround; I think this might be breaking the websockets when a user rejoins a line they've already joined
     @record = LinesUser.find_by(user_id: params[:user], line_id: params[:line], waiting: true)
     if @record.destroy
-      # Commenting this out for testing
-      # send_text(Line.find(params[:line]))
+      send_text(Line.find(params[:line]))
       render json: {}, status: 204
       sleep(0.25)
       @line = Line.find(params[:line])
@@ -82,6 +68,20 @@ class Api::V1::LinesUsersController < ApplicationController
       rescue Twilio::REST::RestError
         puts "Error sending text"
       end
+    end
+  end
+
+  def send_create_text(line)
+    line_id = line.id
+    data = "Welcome to QSmart! Position: #{line.user_count}; Link: http://localhost:3001/lines/#{line_id}"
+    @client = Twilio::REST::Client.new Figaro.env.twilio_account_sid, Figaro.env.twilio_auth_token
+    begin
+    message = @client.messages.create(
+        body: data,
+        to: current_user.phone_number,
+        from: "+14243432797")
+    rescue Twilio::REST::RestError
+      puts "Error sending text"
     end
   end
 
