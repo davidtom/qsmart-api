@@ -1,8 +1,9 @@
 class Api::V1::LinesController < ApplicationController
 
   def create
-    @line = Line.create(name: params[:name])
+    @line = Line.create(name: params[:name], image_url: params[:imageURL])
     current_user.created_lines << @line
+    render json: {line: @line}, status: 200
   end
 
   def show
