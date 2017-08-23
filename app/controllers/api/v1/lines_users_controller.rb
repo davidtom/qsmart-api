@@ -19,6 +19,7 @@ class Api::V1::LinesUsersController < ApplicationController
             from: "+14243432797")
 
         render json: {line_id: @line.id}, status: 200
+        sleep(0.25)
         LineChannel.broadcast_to(@line, @line.waiting_users)
         LineJoinedChannel.broadcast_to(@line_joined, @line.waiting_users)
       elsif @line.active == false
@@ -54,9 +55,10 @@ class Api::V1::LinesUsersController < ApplicationController
     if @record.destroy
       send_text(Line.find(params[:line]))
       render json: {}, status: 204
+      sleep(0.25)
       @line = Line.find(params[:line])
       LineChannel.broadcast_to(@line, @line.waiting_users)
-      LineJoinedChannel.broadcast_to(@line_joined, @line)
+      LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
     else
       render json: {error: "unable to delete"}, status: 500
     end
