@@ -18,4 +18,9 @@ class Api::V1::LinesController < ApplicationController
     @users = Line.find(params[:id]).users
     render json: @users
   end
+
+  def update
+    @line = Line.find(params[:id])
+    @line.update(active: !@line.active)
+  end
 end
