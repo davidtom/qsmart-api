@@ -3,6 +3,10 @@ class Api::V1::LinesController < ApplicationController
   def create
     @line = Line.create(name: params[:name])
     current_user.created_lines << @line
+    # Review actioncable broadcasts here
+    sleep(0.25)
+    LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
+    LineChannel.broadcast_to(@line, @line.waiting_users)
   end
 
   def show
