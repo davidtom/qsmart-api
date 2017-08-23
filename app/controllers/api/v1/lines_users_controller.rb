@@ -5,19 +5,24 @@ class Api::V1::LinesUsersController < ApplicationController
     @user = current_user
     @line = Line.find_by(code: params[:code].upcase)
     if @line
-      @line.users << @user
-      line_id = @line.id
+      # @line.users << @user
+      @record = LinesUser.new(user_id: @user.id, line_id: @line.id)
+      if @record.save
+        line_id = @line.id
 
-      data = "Welcome to QSmart! Position: #{@line.user_count}; Link: http://localhost:3001/lines/#{line_id}"
+        data = "Welcome to QSmart! Position: #{@line.user_count}; Link: http://localhost:3001/lines/#{line_id}"
 
-      @client = Twilio::REST::Client.new Figaro.env.twilio_account_sid, Figaro.env.twilio_auth_token
-      message = @client.messages.create(
-          body: data,
-          to: current_user.phone_number,
-          from: "+14243432797")
+        @client = Twilio::REST::Client.new Figaro.env.twilio_account_sid, Figaro.env.twilio_auth_token
+        message = @client.messages.create(
+            body: data,
+            to: current_user.phone_number,
+            from: "+14243432797")
 
-      render json: {line_id: @line.id}, status: 200
-      LineChannel.broadcast_to(@line, @line.waiting_users)
+        render json: {line_id: @line.id}, status: 200
+        LineChannel.broadcast_to(@line, @line.waiting_users)
+      else
+        render json: {error: "User already member of that line", line: @line}, status: 422
+      end
     elsif !@line
       render json: {error: "Invalid line code"}, status: 404
     else
