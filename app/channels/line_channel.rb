@@ -10,7 +10,7 @@ class LineChannel < ApplicationCable::Channel
 
   def received(data)
     # ActionCable.server.broadcast("line_channel_#{params[:room]}", data)
-    LineChannel.broadcast_to(@line, @line.waiting_users)
+    LineChannel.broadcast_to(@line, {line: @line, users: @line.waiting_users})
   end
 
   def unsubscribed

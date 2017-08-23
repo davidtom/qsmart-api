@@ -6,7 +6,7 @@ class Api::V1::LinesController < ApplicationController
     current_user.created_lines << @line
     sleep(0.25)
     LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
-    LineChannel.broadcast_to(@line, @line.waiting_users)
+    LineChannel.broadcast_to(@line, {line: @line, users: @line.waiting_users})
     render json: {line: @line}, status: 200
   end
 
@@ -18,7 +18,7 @@ class Api::V1::LinesController < ApplicationController
     # ActionCable.server.broadcast_to(@line, @line.waiting_users)
     sleep(0.25)
     LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
-    LineChannel.broadcast_to(@line, @line.waiting_users)
+    LineChannel.broadcast_to(@line, {line: @line, users: @line.waiting_users})
   end
 
   def users
