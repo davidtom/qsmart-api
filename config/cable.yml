@@ -6,5 +6,6 @@ test:
 
 production:
   adapter: redis
-  url: redis://localhost:6379/1
+  url: redis://h:pad3505ce0cfb5ae650cbc0bcd60fea868e7c06b3e3da575b073f42b808b2713e@ec2-34-227-145-196.compute-1.amazonaws.com:42179
+  # url: redis://localhost:6379/1
   channel_prefix: qsmart-api_production
