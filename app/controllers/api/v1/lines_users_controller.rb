@@ -36,8 +36,10 @@ class Api::V1::LinesUsersController < ApplicationController
       # send_text(Line.find(params[:line]))
 
       render json: {}, status: 204
+      sleep(0.25)
       @line = Line.find(params[:line])
       LineChannel.broadcast_to(@line, @line.waiting_users)
+      LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
     else
       render json: {error: "unable to update"}, status: 500
     end
