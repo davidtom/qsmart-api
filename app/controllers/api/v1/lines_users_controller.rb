@@ -9,7 +9,7 @@ class Api::V1::LinesUsersController < ApplicationController
       if @record.save
         send_create_text(@line)
         render json: {line_id: @line.id}, status: 200
-        sleep(0.25)
+        sleep(1.0)
         LineChannel.broadcast_to(@line, @line.waiting_users)
         LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
       elsif @line.active == false
@@ -30,7 +30,7 @@ class Api::V1::LinesUsersController < ApplicationController
     if @record.update(waiting: false)
       send_text(Line.find(params[:line]))
       render json: {}, status: 204
-      sleep(0.25)
+      sleep(1.0)
       @line = Line.find(params[:line])
       LineChannel.broadcast_to(@line, @line.waiting_users)
       LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
@@ -46,7 +46,7 @@ class Api::V1::LinesUsersController < ApplicationController
     if @record.destroy
       send_text(Line.find(params[:line]))
       render json: {}, status: 204
-      sleep(0.25)
+      sleep(1.0)
       @line = Line.find(params[:line])
       LineChannel.broadcast_to(@line, @line.waiting_users)
       LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
