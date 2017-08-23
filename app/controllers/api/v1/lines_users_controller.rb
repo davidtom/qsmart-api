@@ -8,10 +8,10 @@ class Api::V1::LinesUsersController < ApplicationController
       @record = LinesUser.new(user_id: @user.id, line_id: @line.id)
       if @record.save
         send_create_text(@line)
-        render json: {line_id: @line.id}, status: 200
         sleep(1.0)
         LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
         LineChannel.broadcast_to(@line, {line: @line, users: @line.waiting_users})
+        render json: {line_id: @line.id}, status: 200
       elsif @line.active == false
         render json: {error: "Line is not active at this time", line: @line}, status: 422
       else
@@ -29,11 +29,11 @@ class Api::V1::LinesUsersController < ApplicationController
     @record = LinesUser.find_by(user_id: params[:user], line_id: params[:line], waiting: true)
     if @record.update(waiting: false)
       send_text(Line.find(params[:line]))
-      render json: {}, status: 204
       @line = Line.find(params[:line])
       sleep(1.0)
       LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
       LineChannel.broadcast_to(@line, {line: @line, users: @line.waiting_users})
+      render json: {}, status: 204
     else
       render json: {error: "unable to update"}, status: 500
     end
@@ -45,11 +45,11 @@ class Api::V1::LinesUsersController < ApplicationController
     @record = LinesUser.find_by(user_id: params[:user], line_id: params[:line], waiting: true)
     if @record.destroy
       send_text(Line.find(params[:line]))
-      render json: {}, status: 204
       @line = Line.find(params[:line])
       sleep(1.0)
       LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
       LineChannel.broadcast_to(@line, {line: @line, users: @line.waiting_users})
+      render json: {}, status: 204
     else
       render json: {error: "unable to delete"}, status: 500
     end

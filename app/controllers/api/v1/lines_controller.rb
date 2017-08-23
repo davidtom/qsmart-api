@@ -13,12 +13,12 @@ class Api::V1::LinesController < ApplicationController
   def show
     line_id = params[:id]
     @line = Line.find(line_id)
-    render json: {line: @line, users: @line.waiting_users}
     # ActionCable.server.broadcast "line_channel_#{line_id}", @line.users
     # ActionCable.server.broadcast_to(@line, @line.waiting_users)
     sleep(1.0)
     LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
     LineChannel.broadcast_to(@line, {line: @line, users: @line.waiting_users})
+    render json: {line: @line, users: @line.waiting_users}
   end
 
   def users
