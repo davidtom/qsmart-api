@@ -22,7 +22,7 @@ class User < ApplicationRecord
 
   validates :email, uniqueness: true
   validates :phone_number, uniqueness: true
-  before_validation :format_phone_number
+  before_validation :format_phone_number, :format_image_url
   validates :phone_number, length: { is: 12, message: 'must have 10 digits' }
 
   def lines_waiting
@@ -35,6 +35,12 @@ class User < ApplicationRecord
 
   def format_phone_number
     self.phone_number = '+1' + self.phone_number.scan(/\d+/).join('')
+  end
+
+  def format_image_url
+    if profile_image == '' || profile_image == nil
+      self.profile_image = "http://thecampanile.org/wp-content/uploads/2016/10/blank-profile.jpg"
+    end
   end
 
 end
