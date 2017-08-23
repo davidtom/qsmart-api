@@ -33,8 +33,24 @@ class Line < ApplicationRecord
     # a = ActiveRecord::Base.connection
     # result = a.execute(%Q{SELECT users.id, users.first_name, users.last_name, users.email, users.phone_number, users.profile_image_url, lines_users.waiting  FROM users JOIN lines_users ON users.id = lines_users.user_id WHERE waiting=true AND lines_users.line_id=#{a.quote(self.id)};})
     # result
-    user_ids = LinesUser.where(line_id: self.id, waiting: true).pluck(:user_id)
-    User.where(id: user_ids)
+    user_ids = LinesUser.where(line_id: self.id, waiting: true).order(created_at: :asc, updated_at: :asc).pluck(:user_id)
+
+    User.where(id: user_ids).joins("JOIN lines_users on lines_users.user_id = users.id").where("lines_users.waiting=true").order("lines_users.created_at asc")
+    # User.joins("JOIN lines_users on lines_users.user_id = users.id JOIN lines on lines.id = lines_users.line_id WHERE lines.id = ? AND lines_users.waiting = 'true' ORDER BY lines_users.created_at ASC")
+
+    # Author.joins("INNER JOIN posts ON posts.author_id = authors.id AND posts.published = 't'")
+    # NEED TO SORT User.where by Lines_users.created_at
+    # line_id = self.id
+    # sql = <<-sql
+    # SELECT *
+    # FROM users
+    # JOIN lines_users ON users.id = lines_users.user_id
+    # JOIN lines on lines.id = lines_users.line_id
+    # WHERE lines.id = ? AND waiting="t"
+    # ORDER BY lines_users.created_at ASC
+    # sql
+    # User.find_by_sql(sql, line_id)
+
     # sql = <<-sql
     # SELECT users.id, users.first_name, users.last_name, users.email,
     # users.phone_number, users.profile_image_url, lines_users.waiting
