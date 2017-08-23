@@ -58,7 +58,6 @@ class Api::V1::LinesUsersController < ApplicationController
       @line = Line.find(params[:line])
       LineChannel.broadcast_to(@line, @line.waiting_users)
       LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
-
     else
       render json: {error: "unable to delete"}, status: 500
     end
