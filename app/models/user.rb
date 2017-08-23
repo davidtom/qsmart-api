@@ -39,7 +39,7 @@ class User < ApplicationRecord
 
   def format_image_url
     if profile_image_url == '' || profile_image_url == nil
-      self.profile_image_url = "http://thecampanile.org/wp-content/uploads/2016/10/blank-profile.jpg"
+      self.profile_image_url = "https://thecampanile.org/wp-content/uploads/2016/10/blank-profile.jpg"
     end
   end
 
