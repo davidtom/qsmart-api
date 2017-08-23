@@ -10,11 +10,12 @@ class Api::V1::LinesUsersController < ApplicationController
 
       data = "Welcome to QSmart! Position: #{@line.user_count}; Link: http://localhost:3001/lines/#{line_id}"
 
-      @client = Twilio::REST::Client.new Figaro.env.twilio_account_sid, Figaro.env.twilio_auth_token
-      message = @client.messages.create(
-          body: data,
-          to: current_user.phone_number,
-          from: "+14243432797")
+      # Commenting this out for testing
+      # @client = Twilio::REST::Client.new Figaro.env.twilio_account_sid, Figaro.env.twilio_auth_token
+      # message = @client.messages.create(
+      #     body: data,
+      #     to: current_user.phone_number,
+      #     from: "+14243432797")
 
       render json: {line_id: @line.id}, status: 200
       sleep(0.25)
@@ -31,7 +32,8 @@ class Api::V1::LinesUsersController < ApplicationController
     # NOTE: below find depends on the fact that a user is only ever waiting in a line once!
     @record = LinesUser.find_by(user_id: params[:user], line_id: params[:line], waiting: true)
     if @record.update(waiting: false)
-      send_text(Line.find(params[:line]))
+      # Commenting this out for testing
+      # send_text(Line.find(params[:line]))
 
       render json: {}, status: 204
       @line = Line.find(params[:line])
@@ -44,9 +46,11 @@ class Api::V1::LinesUsersController < ApplicationController
 
   def destroy
     # NOTE: below find depends on the fact that a user is only ever waiting in a line once!
+    # TODO: Add workaround; I think this might be breaking the websockets when a user rejoins a line they've already joined
     @record = LinesUser.find_by(user_id: params[:user], line_id: params[:line], waiting: true)
     if @record.destroy
-      send_text(Line.find(params[:line]))
+      # Commenting this out for testing
+      # send_text(Line.find(params[:line]))
       render json: {}, status: 204
       sleep(0.25)
       @line = Line.find(params[:line])
