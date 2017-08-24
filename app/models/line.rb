@@ -40,8 +40,8 @@ class Line < ApplicationRecord
   end
 
   def format_image_url
-    if profile_image_url == '' || profile_image_url == nil
-      self.profile_image_url = "https://thecampanile.org/wp-content/uploads/2016/10/blank-profile.jpg"
+    if image_url == '' || image_url == nil
+      self.image_url = "http://i.imgur.com/n00Ed17.png"
     end
   end
 
