@@ -1,5 +1,4 @@
 class Api::V1::LinesController < ApplicationController
-  before_action :authenticate_user
 
   def create
     image_url = params[:imageURL] || "http://imgur.com/n00Ed17.jpg"
