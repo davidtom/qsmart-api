@@ -8,7 +8,7 @@ class Api::V1::LinesUsersController < ApplicationController
       @record = LinesUser.new(user_id: @user.id, line_id: @line.id)
       if @record.save
         send_create_text(@line)
-        sleep(0.5)
+        # sleep(0.5)
         LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
         LineChannel.broadcast_to(@line, {line: @line, users: @line.waiting_users})
         render json: {line_id: @line.id}, status: 200
@@ -30,7 +30,7 @@ class Api::V1::LinesUsersController < ApplicationController
     if @record.update(waiting: false)
       send_text(Line.find(params[:line]))
       @line = Line.find(params[:line])
-      sleep(0.5)
+      # sleep(0.5)
       LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
       LineChannel.broadcast_to(@line, {line: @line, users: @line.waiting_users})
       render json: {}, status: 204
@@ -46,7 +46,7 @@ class Api::V1::LinesUsersController < ApplicationController
     if @record.destroy
       send_text(Line.find(params[:line]))
       @line = Line.find(params[:line])
-      sleep(0.5)
+      # sleep(0.5)
       LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
       LineChannel.broadcast_to(@line, {line: @line, users: @line.waiting_users})
       render json: {}, status: 204
