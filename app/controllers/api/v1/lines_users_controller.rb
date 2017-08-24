@@ -73,7 +73,7 @@ class Api::V1::LinesUsersController < ApplicationController
 
   def send_create_text(line)
     line_id = line.id
-    data = "Welcome to QSmart! Position: #{line.user_count}; Link: http://localhost:3001/lines/#{line_id}"
+    data = "Welcome to QSmart! Position: #{line.user_count}; Link: https://qsmart-react.herokuapp.com/lines/#{line_id}"
     @client = Twilio::REST::Client.new Figaro.env.twilio_account_sid, Figaro.env.twilio_auth_token
     begin
     message = @client.messages.create(
