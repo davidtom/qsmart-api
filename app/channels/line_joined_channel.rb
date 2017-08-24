@@ -5,7 +5,7 @@ class LineJoinedChannel < ApplicationCable::Channel
   end
 
   def received(data)
-    LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
+    LineJoinedChannel.broadcast_to(@line, {line: @line, users: @line.waiting_users})
   end
 
   def unsubscribed
