@@ -20,6 +20,8 @@ class Line < ApplicationRecord
 
   before_create :generate_code
 
+  before_validation :format_image_url
+
   validates :name, :owner_id, presence: true
   validates :code, uniqueness: true
 
@@ -30,45 +32,17 @@ class Line < ApplicationRecord
   end
 
   def waiting_users
-    # a = ActiveRecord::Base.connection
-    # result = a.execute(%Q{SELECT users.id, users.first_name, users.last_name, users.email, users.phone_number, users.profile_image_url, lines_users.waiting  FROM users JOIN lines_users ON users.id = lines_users.user_id WHERE waiting=true AND lines_users.line_id=#{a.quote(self.id)};})
-    # result
-    # user_ids = LinesUser.where(line_id: self.id, waiting: true).order(created_at: :asc, updated_at: :asc).pluck(:user_id)
-
-    # user_ids.map{|user_id| }
-
     self.users.where("lines_users.waiting=true").order("lines_users.created_at ASC")
-
-    # User.where(id: user_ids).joins("JOIN lines_users on lines_users.user_id = users.id").where("lines_users.waiting=true").order("lines_users.created_at asc")
-
-
-    # User.joins("JOIN lines_users on lines_users.user_id = users.id JOIN lines on lines.id = lines_users.line_id WHERE lines.id = ? AND lines_users.waiting = 'true' ORDER BY lines_users.created_at ASC")
-
-    # Author.joins("INNER JOIN posts ON posts.author_id = authors.id AND posts.published = 't'")
-    # NEED TO SORT User.where by Lines_users.created_at
-    # line_id = self.id
-    # sql = <<-sql
-    # SELECT *
-    # FROM users
-    # JOIN lines_users ON users.id = lines_users.user_id
-    # JOIN lines on lines.id = lines_users.line_id
-    # WHERE lines.id = ? AND waiting="t"
-    # ORDER BY lines_users.created_at ASC
-    # sql
-    # User.find_by_sql(sql, line_id)
-
-    # sql = <<-sql
-    # SELECT users.id, users.first_name, users.last_name, users.email,
-    # users.phone_number, users.profile_image_url, lines_users.waiting
-    # FROM users
-    # JOIN lines_users ON users.id = lines_users.user_id
-    # JOIN lines on lines.id = lines_users.line_id
-    # WHERE line = ? AND waiting=true;
-    # sql
-    # Line.find_by_sql(sql, line_id)
   end
 
   def user_count
     self.waiting_users.count
   end
+
+  def format_image_url
+    if profile_image_url == '' || profile_image_url == nil
+      self.profile_image_url = "https://thecampanile.org/wp-content/uploads/2016/10/blank-profile.jpg"
+    end
+  end
+
 end
