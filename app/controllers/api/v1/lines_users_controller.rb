@@ -1,12 +1,5 @@
 class Api::V1::LinesUsersController < ApplicationController
   before_action :authenticate_user
-  after_commit :broadcast, on: [:create, :update, :destroy]
-
-  def broadcast
-    sleep(0.5)
-    LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
-    LineChannel.broadcast_to(@line, {line: @line, users: @line.waiting_users})
-  end
 
   def create
     @user = current_user
@@ -15,9 +8,9 @@ class Api::V1::LinesUsersController < ApplicationController
       @record = LinesUser.new(user_id: @user.id, line_id: @line.id)
       if @record.save
         send_create_text(@line)
-        # sleep(1.0)
-        # LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
-        # LineChannel.broadcast_to(@line, {line: @line, users: @line.waiting_users})
+        sleep(0.5)
+        LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
+        LineChannel.broadcast_to(@line, {line: @line, users: @line.waiting_users})
         render json: {line_id: @line.id}, status: 200
       elsif @line.active == false
         render json: {error: "Line is not active at this time", line: @line}, status: 422
@@ -37,9 +30,9 @@ class Api::V1::LinesUsersController < ApplicationController
     if @record.update(waiting: false)
       send_text(Line.find(params[:line]))
       @line = Line.find(params[:line])
-      # sleep(1.0)
-      # LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
-      # LineChannel.broadcast_to(@line, {line: @line, users: @line.waiting_users})
+      sleep(0.5)
+      LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
+      LineChannel.broadcast_to(@line, {line: @line, users: @line.waiting_users})
       render json: {}, status: 204
     else
       render json: {error: "unable to update"}, status: 500
@@ -53,9 +46,9 @@ class Api::V1::LinesUsersController < ApplicationController
     if @record.destroy
       send_text(Line.find(params[:line]))
       @line = Line.find(params[:line])
-      # sleep(1.0)
-      # LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
-      # LineChannel.broadcast_to(@line, {line: @line, users: @line.waiting_users})
+      sleep(0.5)
+      LineJoinedChannel.broadcast_to(@line, @line.waiting_users)
+      LineChannel.broadcast_to(@line, {line: @line, users: @line.waiting_users})
       render json: {}, status: 204
     else
       render json: {error: "unable to delete"}, status: 500
